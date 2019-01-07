@@ -1,2 +1,2 @@
-## EEE598: Python for Rapid Engineering Solution
+## EEE591: Python for Rapid Engineering Solution
 ## Author: Po-Kan Shih
