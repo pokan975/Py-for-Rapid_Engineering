@@ -19,12 +19,21 @@ for num in range(3,upperbound+1):
         prime_list.append(num)
         continue
     
-    prime_num_flag = 1
+    bPrime_num = 1
     
     for prime_num in prime_base:
         if not num % prime_num:
-            prime_num_flag = 0
+            bPrime_num = 0
             break
     
-    if prime_num_flag:
+    if bPrime_num:
         prime_list.append(num)
+
+
+# =============================================================================
+# input("") without a variable means only a blank line in output
+#        for and while loop can have else
+#        do not compare 2 floating num (because of the precision issue)
+#        "global" declaration is dangerous, use global variable name is dangerous
+#        input of a function is passed by "value", but array and list passed by init addr of them, so they passed by reference
+# =============================================================================
