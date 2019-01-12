@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
 """
 Created on Tue Jan  8 21:43:57 2019
 
@@ -19,14 +19,14 @@ for num in range(3,upperbound+1):
         prime_list.append(num)
         continue
     
-    bPrime_num = 1
+    fPrime_num = 1
     
     for prime_num in prime_base:
-        if not num % prime_num:
-            bPrime_num = 0
+        if not ( num % prime_num ):
+            fPrime_num = 0
             break
     
-    if bPrime_num:
+    if fPrime_num:
         prime_list.append(num)
 
 
