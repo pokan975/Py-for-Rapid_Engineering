@@ -11,7 +11,7 @@ from numpy import sqrt
 upperbound = int(1e4)
 prime_list = [2]
 
-for num in range(3,upperbound+1):
+for num in range(3, upperbound+1):
     
     prime_base = [i for i in prime_list if i <= sqrt(num)]
     

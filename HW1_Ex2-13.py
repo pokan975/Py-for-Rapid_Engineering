@@ -25,16 +25,31 @@ def GCD(m, n):
 
 
 
-Num_fact = int(input("Enter a positive integer to get factorial: "))
+try:
+    Num_fact = int(input("Enter a positive integer to get factorial: "))
 
-print("{}! = ".format(Num_fact), factorial(Num_fact))
+except:
+    print("Your input is invalid!")
+
+else:
+    print("{}! = ".format(Num_fact), factorial(Num_fact))
 
 
-Num_cata = int(input("Enter an positive integer for Catalan: "))
+try:
+    Num_cata = int(input("Enter an positive integer for Catalan: "))
 
-print("Catalan factorial of {} is".format(Num_cata), Catalan(Num_cata))
+except:
+    print("Your input is invalid!")
+
+else:
+    print("Catalan factorial of {} is".format(Num_cata), Catalan(Num_cata))
 
 
-GCD_num1, GCD_num2 = input("Enter 2 positive integers to get their GCD: ").split()
+try:
+    GCD_num1, GCD_num2 = input("Enter 2 positive integers to get their GCD: ").split()
 
-print("The GCD of {0} and {1} is".format(GCD_num1, GCD_num2), GCD(int(GCD_num1), int(GCD_num2)))
+except:
+    print("Your input is invalid!")
+
+else:
+    print("The GCD of {0} and {1} is".format(GCD_num1, GCD_num2), GCD(int(GCD_num1), int(GCD_num2)))
