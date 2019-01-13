@@ -48,3 +48,6 @@ for num in range(3, max_num + 1):
     # add n to prime list if no factor is found
     if prime_flag:
         prime_list.append(num)
+
+# take the final prime list as answer
+ans = prime_list
