@@ -1,23 +1,25 @@
 #!/usr/bin/env python
-"""
-Created on Tue Jan  8 23:28:37 2019
+# =============================================================================
+# Main Code:
+# Let user input a integer (height), then calculate the time a ball takes from this height to the ground.
+# Return error msg if user enters invalid data format.
+# =============================================================================
 
-@author: William
-"""
 
 from numpy import sqrt
 
-error = True
+try:
+    # catch user-defined height (integer, in meter)
+    Height = int(input("Enter the height in meter: "))
+    
+    # compute time: height = 0.5*g*(t^2), takes g = 9.81 m/(s^2) as gravitational acceleration
+    Time = sqrt(2 * Height / 9.81) 
+    
+    # output result
+    print("\nThe time the ball takes from {}m to hit the ground is".format(Height), round(Time, 2), "sec.")
 
-while error:
-    try:
-        height = int(input("Enter the height of the tower in meter: "))
-        error = False
-    except:
-        print("\nYour input is invalid!")
+# error handling: catch all kinds of error, output error msg
+except:
+    print("\nYour input is invalid!")
 
-
-time = sqrt(2 * height / 9.81)
-
-print("\nThe time the ball takes from {}m to hit the ground is".format(height), round(time, 2), "sec.")
 

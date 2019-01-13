@@ -1,39 +1,50 @@
 #!/usr/bin/env python
-"""
-Created on Tue Jan  8 21:43:57 2019
+# =============================================================================
+# Main Code:
+# Find all prime numbers less or equal than 10^4.
+# Prime factor examination:
+#     an non-prime integer must have prime factors less or equal than its square root, or it's a prime.
+# 
+# Pseudo code:
+# for all integers n:
+#     prime_factor_list = elements in prime_num_list less or equal than sqrt(n)
+#     if prime_factor_list empty:
+#         n is prime, skip
+#     
+#     set prime_flag True
+#     for factors in prime_factor_list:
+#         if (n mod factors) == 0:
+#             reset prime flag, interrupt loop
+#     if prime flag True:
+#         add n to prime_num_list
+# =============================================================================
 
-@author: William
-"""
 
-## Exercise 2.12
 from numpy import sqrt
 
-upperbound = int(1e4)
-prime_list = [2]
+Max_num = int(1e4)
+# initiate prime list from 2 (minimum prime)
+Prime_list = [2]
 
-for num in range(3, upperbound+1):
+for num in range(3, Max_num + 1):
     
-    prime_base = [i for i in prime_list if i <= sqrt(num)]
+    # list all primes less or equal than n as factors
+    PrimeFactor_list = [i for i in Prime_list if i <= sqrt(num)]
     
-    if prime_base is []:
-        prime_list.append(num)
+    # if factors is empty, n is a prime, skip residual codes
+    if PrimeFactor_list == []:
+        Prime_list.append(num)
         continue
     
-    fPrime_num = 1
+    # if factors not empty, default regard n as prime, set flag True
+    Prime_flag = True
     
-    for prime_num in prime_base:
-        if not ( num % prime_num ):
-            fPrime_num = 0
+    # check if n has factor in factors, once find, stop check & set flag False
+    for factor in PrimeFactor_list:
+        if num % factor == 0:
+            Prime_flag = False
             break
     
-    if fPrime_num:
-        prime_list.append(num)
-
-
-# =============================================================================
-# input("") without a variable means only a blank line in output
-#        for and while loop can have else
-#        do not compare 2 floating num (because of the precision issue)
-#        "global" declaration is dangerous, use global variable name is dangerous
-#        input of a function is passed by "value", but array and list passed by init addr of them, so they passed by reference
-# =============================================================================
+    # n is prime if flag remains True, add to list
+    if Prime_flag:
+        Prime_list.append(num)
