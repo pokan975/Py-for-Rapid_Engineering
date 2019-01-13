@@ -8,19 +8,22 @@
 
 from numpy import sqrt
 
+# takes g = 9.81 m/(s^2) as gravitational acceleration
+GRAVITY_CONST = 9.81
+
 try:
     # ask for user-defined starting altitude
-    Height = float(input("enter height: "))
+    height = float(input("enter height: "))
     
-    # height = 0.5*g*(t^2), takes g = 9.81 m/(s^2) as gravitational acceleration
-    Time = sqrt(2 * Height / 9.81) 
+    # because height = 0.5*g*(t^2), derive t
+    time = sqrt(2 * height / GRAVITY_CONST)
     
     # add this to separate in and out
     print("")
     # output result
-    print("time to hit the ground from {}m:".format(Height), round(Time, 2), "seconds.")
+    print("time to hit the ground from {}m:".format(height), round(time, 2), "seconds.")
 
-# error handling: catch all kinds of error, output error msg
+# error handling: catch all kinds of error, print error msg
 except:
     print("\nYour input is invalid!")
 
