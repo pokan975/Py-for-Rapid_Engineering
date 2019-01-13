@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 # =============================================================================
 # Function:
 # Calculate & return Catalan number C_n of input n:
@@ -7,10 +6,10 @@
 # C_n = (C_{n-1})*((4*n - 2) / (n + 1)), if n > 0
 # =============================================================================
 def Catalan(num):
-#    type num: int
-#    rtype: int
+# type num: int
+# rtype: int
     
-    # recursively call self with input n, n-1, n-2,...,until 0 then return 1
+    # recursively call self with input n, n-1, n-2,...,until 0
     if num == 0:
         return 1
     else:
@@ -24,11 +23,12 @@ def Catalan(num):
 # GCD(m, n) = GCD(n, m mod n), if n > 0
 # =============================================================================
 def calcGCD(num1, num2):
-#    type num1: int
-#    type num2: int
-#    rtype: int
+# type num1: int
+# type num2: int
+# rtype: int
 
     # if (m ond n) = 0, n is GCD
+    # recursively take (m, n), (n, m mod n), ((m mod n), n mod (m mod n))... as input until the 2nd argument is 0 
     if num2 == 0:
         return num1
     else:
