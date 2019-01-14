@@ -49,5 +49,5 @@ for num in range(3, max_num + 1):
     if prime_flag:
         prime_list.append(num)
 
-# take the final prime list as answer
-ans = prime_list
+# print out final prime list
+print(prime_list)

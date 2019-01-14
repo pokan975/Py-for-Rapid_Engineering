@@ -1,15 +1,31 @@
 #!/usr/bin/env python
 # =============================================================================
 # Function:
+# Calculate the factorial of input n:
+# n! = 1,           if n = 1
+# n! = n * (n-1)!,  if n > 1
+# =============================================================================
+def factorial(num):
+# type num: int
+# rtype: int
+    
+    # recursively call self with input n, n-1, n-2,...,until 1 to calc n!
+    if num == 1:
+        return 1
+    else:
+        return num * factorial(num - 1)
+
+# =============================================================================
+# Function:
 # Calculate & return Catalan number C_n of input n:
-# C_n = 1,                             if n = 0
+# C_n = 1,                               if n = 0
 # C_n = (C_{n-1})*((4*n - 2) / (n + 1)), if n > 0
 # =============================================================================
 def Catalan(num):
 # type num: int
 # rtype: int
     
-    # recursively call self with input n, n-1, n-2,...,until 0
+    # recursively call self with input n, n-1, n-2,...,until 0 to calc Catalan num
     if num == 0:
         return 1
     else:
@@ -18,7 +34,7 @@ def Catalan(num):
 
 # =============================================================================
 # Function:
-# Calculate the Greatest Common Factor (GCD) of 2 positive integers:
+# Calculate the Greatest Common Divisor (GCD) of 2 positive integers:
 # GCD(m, n) = m,               if n = 0
 # GCD(m, n) = GCD(n, m mod n), if n > 0
 # =============================================================================
@@ -39,15 +55,25 @@ def calcGCD(num1, num2):
 # Main Code:
 # =============================================================================
 
-# get Catalan number of 100 then print out
-num_cata = 100
+# get factorial num and print out
+num_factorial = int(input("Enter an integer for a factorial computation: "))
 
-print("\nCatalan number of {} is".format(num_cata), Catalan(num_cata))
+print("")
+print("factorial of {} is".format(num_factorial), factorial(num_factorial))
 
 
-# get the GCD of 108 & 192 then print out
-GCD_num1, GCD_num2 = 108, 192
+# get Catalan number then print out
+num_cata = int(input("Enter an integer for a Catalan number computation: "))
 
-print("\nThe GCD of {0} and {1} is".format(GCD_num1, GCD_num2), calcGCD(GCD_num1, GCD_num2))
+print("")
+print("Catalan value of {} is".format(num_cata), Catalan(num_cata))
+
+
+# get the GCD of 2 integers and print out
+GCD_num1 = int(input("Enter the first of two integers for a GCD calculation: "))
+GCD_num2 = int(input("Enter the second of two integers for a GCD calculation: "))
+
+print("")
+print("greatest common divisor of {0} and {1} is".format(GCD_num1, GCD_num2), calcGCD(GCD_num1, GCD_num2))
 
 
