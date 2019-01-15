@@ -28,20 +28,15 @@ prime_list = [2]
 
 for num in range(3, max_num + 1):
     
-    # extract all primes less or equal than sqrt(n) from prime list as factors
-    primeFactor_list = list(filter(lambda x: x <= sqrt(num), prime_list))
-    
-    # if factors is empty, n is prime, skip remaining codes
-    if primeFactor_list == []:
-        prime_list.append(num)
-        continue
-    
-    # if factors not empty, default take n as prime
+    # default take n as prime
     prime_flag = True
     
     # find n's factor in factors, once find out, reset flag & break loop
-    for factor in primeFactor_list:
-        if num % factor == 0:
+    for factor in prime_list:
+        # only check prime factors less or equal than sqrt(n)
+        if factor > sqrt(num):
+            break
+        elif num % factor == 0:
             prime_flag = False
             break
     
