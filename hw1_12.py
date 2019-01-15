@@ -4,19 +4,6 @@
 # Find all prime numbers less or equal than 10^4.
 # Prime factor examination:
 #     an non-prime integer must have prime factors less or equal than its square root, or it's a prime.
-# 
-# Pseudo code:
-# for all integers n:
-#     prime_factor_list = elements in prime_num_list less or equal than sqrt(n)
-#     if prime_factor_list empty:
-#         n is prime, skip
-#     
-#     set prime_flag True
-#     for factors in prime_factor_list:
-#         if (n mod factors) == 0:
-#             reset prime flag, interrupt loop
-#     if prime flag True:
-#         n is prime
 # =============================================================================
 
 
@@ -31,7 +18,7 @@ for num in range(3, max_num + 1):
     # default take n as prime
     prime_flag = True
     
-    # find n's factor in factors, once find out, reset flag & break loop
+    # find n's prime factors, once find out, reset flag & break loop
     for factor in prime_list:
         # only check prime factors less or equal than sqrt(n)
         if factor > sqrt(num):
