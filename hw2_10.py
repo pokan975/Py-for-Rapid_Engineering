@@ -7,18 +7,28 @@
 
 # import required lib & functions
 import numpy as np
-import scipy.integrate as integrate
+from gaussxw import gaussxw
 
 # define constants
 mass = 1
-amp_lowbound = 0.0
-amp_uppbound = 2.0
-sample_pts = 20
+N = 20
 
-amp_array = np.arange(amp_lowbound, amp_uppbound + 0.02, 0.02)
+integral = lambda x, a: ((a**6 - x**6)**0.5)**-1
 
-integral = lambda x, a: np.reciprocal(np.sqrt(a**6 - x**6))
+T = []
+amplitude = np.arange(0.01, 2, 0.01)
 
-T_part1 = np.sqrt(8 * mass)
+T_part1 = (8 * mass)**0.5
 
-integ_part = integrate.quadrature(integral, amp_lowbound, amp_array)
+for a in np.nditer(amplitude):
+    x, w = gaussxw(N)
+    xp = (0.5 * (a - 0) * x) + (0.5 * (a + 0))
+    wp = 0.5 * (a - 0) * w
+    s = 0.0
+    for k in range(N):
+        s += wp[k] * integral(x, a)
+    
+    T.append(s)
+
+T = np.asanyarray(T)
+np.multiply(T_part1, T)

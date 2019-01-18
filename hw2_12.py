@@ -18,9 +18,9 @@ pi = np.pi
 
 integral = lambda x: (x**3) / expm1(x)
 
-integ_part = integrate.quad(integral, 0, np.inf)
+result, err = integrate.quad(integral, 0, np.inf)
 
 boltz_const_up = boltz**4
 boltz_const_down = 4 * (pi**2) * (c**2) * (hbar**3)
 
-boltz_const = (boltz_const_up * integ_part) / boltz_const_down
+boltz_const = (boltz_const_up * result) / boltz_const_down
