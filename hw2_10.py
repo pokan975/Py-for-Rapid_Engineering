@@ -7,13 +7,15 @@
 
 # import required lib & functions
 import numpy as np
+import matplotlib.pyplot as plt
 from gaussxw import gaussxw
 
 # define constants
 mass = 1
 N = 20
 
-integral = lambda x, a: ((a**6 - x**6)**0.5)**-1
+def integral(x, a): 
+    return ((a**6 - x**6)**0.5)**-1
 
 T = []
 amplitude = np.arange(0.01, 2, 0.01)
@@ -26,9 +28,11 @@ for a in np.nditer(amplitude):
     wp = 0.5 * (a - 0) * w
     s = 0.0
     for k in range(N):
-        s += wp[k] * integral(x, a)
+        s += wp[k] * integral(xp[k], a)
     
     T.append(s)
 
 T = np.asanyarray(T)
 np.multiply(T_part1, T)
+
+plt.plot(amplitude, T)

@@ -7,8 +7,8 @@
 
 # import required lib & functions
 import numpy as np
-from math import expm1
 import scipy.integrate as integrate
+from math import exp
 
 # define constants
 hbar = 1.055e-34
@@ -16,11 +16,13 @@ boltz = 1.381e-23
 c = 2.998e8
 pi = np.pi
 
-integral = lambda x: (x**3) / expm1(x)
+def integral(z):
+    x = z / (1 - z)
+    return (x**3) / (exp(x) - 1)
 
-result, err = integrate.quad(integral, 0, np.inf)
+res, err = integrate.quad(integral, 0.01, 1)
 
 boltz_const_up = boltz**4
 boltz_const_down = 4 * (pi**2) * (c**2) * (hbar**3)
 
-boltz_const = (boltz_const_up * result) / boltz_const_down
+boltz_const = (boltz_const_up * res) / boltz_const_down
