@@ -17,7 +17,7 @@ def integral(x, a):
     return np.sqrt(1 / (a**6 - x**6))
 
 T = []                                # list of period
-amplitude = np.arange(0.01, 2, 0.01)  # list of initial amplitude as input
+amplitude = np.arange(0, 2, 0.1)  # list of initial amplitude as input
 
 # for each initial amplitude, integrate the period (using Gaussian quadrature) 
 for aa in np.nditer(amplitude):
@@ -28,7 +28,7 @@ T = np.asanyarray(T)
 
 # sqrt(8*mass) is the constant part of every T period
 T_part1 = np.sqrt(8 * mass)
-np.multiply(T_part1, T)
+T = T_part1*T
 
 # show result
 plt.plot(amplitude, T)

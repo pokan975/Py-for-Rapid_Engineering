@@ -34,5 +34,5 @@ stf_boltz_const = boltz_const_up * res / boltz_const_down
 
 #output result
 print("")
-print("The Stefan-Boltzmann constant is {:0.3e}".format(stf_boltz_const))
+print("The Stefan-Boltzmann constant is {:.3e}".format(stf_boltz_const))
 
