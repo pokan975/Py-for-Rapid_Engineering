@@ -1,74 +1,39 @@
 #!/usr/bin/env python
 # =============================================================================
 # Main Code:
-# Calculate Stefan-Boltzmann constant
-# Return error msg if user's input is invalid.
+# Calculate and plot the period-amplitude relation of an anharmonic oscillator
+# start amplitude: 0m~2m, with zero initial velocity
 # =============================================================================
 
-# =============================================================================
-# 
-# import numpy as np
-# import matplotlib.pyplot as plt
-# from gaussxw import gaussxw
-# 
-# 
-# mass = 1
-# N = 20
-# 
-# def integral(x, a): 
-#     return ((a**6 - x**6)**0.5)**-1
-# 
-# T = []
-# amplitude = np.arange(0.01, 2, 0.01)
-# 
-# T_part1 = (8 * mass)**0.5
-# 
-# for a in np.nditer(amplitude):
-#     x, w = gaussxw(N)
-#     xp = (0.5 * (a - 0) * x) + (0.5 * (a + 0))
-#     wp = 0.5 * (a - 0) * w
-#     s = 0.0
-#     for k in range(N):
-#         s += wp[k] * integral(xp[k], a)
-#     
-#     T.append(s)
-# 
-# T = np.asanyarray(T)
-# np.multiply(T_part1, T)
-# 
-# plt.plot(amplitude, T)
-# =============================================================================
-
-# import required lib & functions
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import fixed_quad
 
-# define constants
-mass = 1
-N = 20
+mass = 1  # mass of the object
+N = 20    # Gaussian quadrature with degree = 20
 
-# define integration part
+# define integration part, potential is power 6 of the amplitude
 def integral(x, a):
-    return ((a**6 - x**6)**0.5)**-1
+    return np.sqrt(1 / (a**6 - x**6))
 
-T = []
-amplitude = np.arange(0.01, 2, 0.01)
+T = []                                # list of period
+amplitude = np.arange(0.01, 2, 0.01)  # list of initial amplitude as input
 
+# for each initial amplitude, integrate the period (using Gaussian quadrature) 
 for aa in np.nditer(amplitude):
     val, err = fixed_quad(integral, 0, aa, args = (aa,), n = N)
-     
     T.append(val)
 
 T = np.asanyarray(T)
-T_part1 = (8 * mass)**0.5
+
+# sqrt(8*mass) is the constant part of every T period
+T_part1 = np.sqrt(8 * mass)
 np.multiply(T_part1, T)
 
+# show result
 plt.plot(amplitude, T)
 plt.xlabel("amplitude (m)")
 plt.ylabel("period T (sec)")
 plt.title('Period of Oscillator for Given Amplitude')
 plt.grid()
-
-
 
