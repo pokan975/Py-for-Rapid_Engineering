@@ -22,11 +22,12 @@ for comp in netlist:
 A = np.zeros([N, N], float)
 current_vector = np.zeros([N, 1], float)
 
-# stamp the resistence, voltage, and current value on the admittance matrix
+# stamp each resistor, voltage, and current value on the admittance matrix
 for comp in netlist:
+    i = comp[COMP.I] - 1
+    j = comp[COMP.J] - 1
+    
     if (comp[COMP.TYPE] == COMP.R):
-        i = comp[COMP.I] - 1
-        j = comp[COMP.J] - 1
         if (i >= 0):
             A[i, i] += 1.0/comp[COMP.VAL]
         
@@ -36,21 +37,25 @@ for comp in netlist:
                 A[j, i] += -1.0/comp[COMP.VAL]
         
     elif (comp[COMP.TYPE] == COMP.VS):
-        j = comp[COMP.J] - 1
+        volt = np.zeros([1, A.shape[1]], float)
+        current = np.zeros([A.shape[0] + 1 , 1], float)
+        
+        if (i >= 0):
+            volt[0, i] = -1
+            current[i, 0] = -1
+        
         if (j >= 0):
-            volt = np.zeros([1, A.shape[1]], float)
             volt[0, j] = 1
-            A = np.concatenate((A, volt), axis = 0)
-            
-            volt_add = comp[COMP.VAL] * np.ones([1, 1])
-            current_vector = np.concatenate((current_vector, volt_add), axis = 0)
-                
-            current = np.zeros([A.shape[0], 1], float)
             current[j, 0] = 1
-            A = np.concatenate((A, current), axis = 1)
             
+        A = np.concatenate((A, volt), axis = 0)
+        A = np.concatenate((A, current), axis = 1)
+        
+        volt_add = comp[COMP.VAL] * np.ones([1, 1])
+        current_vector = np.concatenate((current_vector, volt_add), axis = 0)
+        
 # compute the voltage on each node
 voltage_vector = solve(A, current_vector)
 
-#output result
+# output result
 print(voltage_vector)
