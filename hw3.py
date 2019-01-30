@@ -73,4 +73,5 @@ for comp in netlist:
 voltage_vector = solve(A, current_vector)
 
 # output result
+np.set_printoptions(precision = 3)
 print(voltage_vector)
