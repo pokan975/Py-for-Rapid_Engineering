@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -53,18 +52,22 @@ def pairplotting(df):
     sns.pairplot(df[cols],size=2.5)
     plt.show()
 
+# =============================================================================
+# Main Code:
 
-iris = pd.read_csv('heart1.csv')
 
-cols = iris.columns
+# =============================================================================
+heart = pd.read_csv('heart1.csv')
+
+cols = heart.columns
 
 
 # get rid of observations containing null value
-for i in range(iris.values.shape[0]):
-    null_value = sum(iris.iloc[i,:].isnull())
+for i in range(heart.values.shape[0]):
+    null_value = sum(heart.iloc[i,:].isnull())
     
     if null_value != 0:
-        iris.drop(iris.index[i])
+        heart.drop(heart.index[i])
         
 # =============================================================================
 # print(' Descriptive Statistics ')
@@ -72,10 +75,72 @@ for i in range(iris.values.shape[0]):
 # =============================================================================
 
 print("Most Highly Correlated")
-print(mosthighlycorrelated(iris,5))
+print(mosthighlycorrelated(heart,10))
 
-print(' Covariance Matrix ')
-corr_matrix(iris.iloc[:,0:-1], cols[0:-1])
+# =============================================================================
+# print(' Covariance Matrix ')
+# corr_matrix(iris.iloc[:,0:-1], cols[0:-1])
+# 
+# print(' Pair plotting ')
+# pairplotting(iris)
+# =============================================================================
 
-print(' Pair plotting ')
-pairplotting(iris)
+# observation data
+X = heart.iloc[:,[7,8,11,12]].values
+# target
+Y = heart.iloc[:,13].values
+
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size = 50)
+
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()  # do standard normalization on data: z = (x - u) / std
+x_train_std = sc.fit_transform(x_train)
+x_test_std = sc.fit_transform(x_test)
+
+# =============================================================================
+# Perceptron
+# =============================================================================
+from sklearn.linear_model import Perceptron
+
+ppn = Perceptron(max_iter = 50, tol = 1e-3, eta0 = 0.001, fit_intercept = True)
+ppn.fit(x_train_std, y_train)
+
+print('Number in test ', len(y_test))
+y_pred = ppn.predict(x_test_std)
+print('Misclassified samples: %d' % (y_test != y_pred).sum())
+
+from sklearn.metrics import accuracy_score
+print('Accuracy: %.2f' % accuracy_score(y_test, y_pred))
+
+
+# =============================================================================
+# Logistic Regression
+# =============================================================================
+from sklearn.linear_model import LogisticRegression
+
+lr = LogisticRegression(C = 50.0, solver = "liblinear")
+lr.fit(x_train_std, y_train)
+
+print('Number in test ', len(y_test))
+y_pred = lr.predict(x_test_std)
+print('Misclassified samples: %d' % (y_test != y_pred).sum())
+print('Accuracy: %.2f' % accuracy_score(y_test, y_pred))
+
+
+# =============================================================================
+# Support Vector Machine
+# =============================================================================
+from sklearn.svm import SVC
+
+svm = SVC(kernel = 'rbf', gamma = 0.2, C = 2.0)
+svm.fit(x_train_std, y_train)
+
+print('Number in test ', len(y_test))
+y_pred = svm.predict(x_test_std)
+print('Misclassified samples: %d' % (y_test != y_pred).sum())
+print('Accuracy: %.2f' % accuracy_score(y_test, y_pred))
+
+
+
+
