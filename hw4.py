@@ -44,7 +44,7 @@ def calc_wealth(entries, display_frame):
         wealth.append(wealth_next)
         
     # show and align the final wealth at retirement (just the final element of wealth list)
-    string = "the final wealth is " + str(wealth[-1])
+    string = "wealth at retirement: " + str(wealth[-1])
     msg = Label(display_frame, text = string, anchor = W)
     msg.pack(side = LEFT)
     
