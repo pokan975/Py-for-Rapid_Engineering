@@ -1,7 +1,55 @@
 #!/usr/bin/env python
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+
+
+# =============================================================================
+# Function:
+# Plot the confusion matrix.
+# =============================================================================
+def plot_confusion_matrix(y_true, y_pred, classes, title):
+# type y_true: array[int]
+# type y_pred: array[int]
+# type classes: array[str]
+# type title: str
+
+    # Compute confusion matrix
+    cm = confusion_matrix(y_true, y_pred)
+
+    # create plot instance
+    fig, ax = plt.subplots(figsize = (5, 5))
+    im = ax.imshow(cm, interpolation = 'nearest', cmap = plt.cm.Blues)
+    ax.figure.colorbar(im, ax = ax, fraction = 0.046, pad = 0.04)
+    # show all ticks...
+    ax.set(xticks = np.arange(cm.shape[1]),
+           yticks = np.arange(cm.shape[0]),
+           # ... and label them with the respective list entries
+           xticklabels = classes, yticklabels = classes,
+           title = title,
+           # set x/y axes labels
+           ylabel = 'True label',
+           xlabel = 'Predicted label')
+    # remove grid
+    ax.grid(b = False)
+
+    # Rotate the tick labels and set their alignment.
+    plt.setp(ax.get_xticklabels(), rotation = 45, ha = "right", rotation_mode = "anchor")
+
+    # Loop over data dimensions and create text annotations of TP/TN/FP/FN results at the center.
+    thresh = cm.max() / 2.
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            ax.text(j, i, format(cm[i, j]),
+                    ha = "center", va = "center",
+                    fontsize = 14,
+                    color = "white" if cm[i, j] > thresh else "black")
+    fig.tight_layout()
+    plt.show()
+
+
 
 # =============================================================================
 # Main Code:
@@ -9,6 +57,8 @@ from sklearn.metrics import accuracy_score
 # =============================================================================
 # read data from csv file as dataframe
 sonar = pd.read_csv("sonar_all_data_2.csv")
+# create tick labels
+axes_label = np.array(["rock", "mine"])
 
 # drop observation data that contains null value
 for i in range(sonar.values.shape[0]):
@@ -34,19 +84,18 @@ x_train_std = sc.fit_transform(x_train)
 x_test_std = sc.fit_transform(x_test)
 x_std = sc.fit_transform(x)
 
+# use PCA (singular value decomposition) to analyze the influence of components
 from sklearn.decomposition import PCA
-pca = PCA()
+# only show the top 30 components that have the highest influence on predicting result
+pca = PCA(n_components = 30)
 
+# calc the PCA of test data & show result
 pca.fit(x_std)
+print("Top 30 Singular values:\n", pca.singular_values_)
 
-x_train_pca = pca.transform(x_train_std)
-x_test_pca = pca.transform(x_test_std)
-
-print("Singular values", pca.singular_values_)
-
-from sklearn.preprocessing import normalize
-aa = pca.singular_values_.reshape((-1, 1))
-bb = normalize(aa, norm = "l1", axis = 0)
+# based on the PCA result, only extract the first n highest influential components as variables
+x_train_pca = pca.transform(x_train_std)[:, 0:7]
+x_test_pca = pca.transform(x_test_std)[:, 0:7]
 
 # recombine data for later test
 x_combined = np.vstack((x_train_pca, x_test_pca))
@@ -69,9 +118,12 @@ ppn.fit(x_train_pca, y_train)
 # testing classifier using the whole dataset (training + testing set)
 y_pred = ppn.predict(x_combined)
 # show classification accuracy
-print("\nPerceptron ==>")
+print("\nPerceptron =======>")
 print("Misclassified/total samples: %d/%d" % ((y_combined != y_pred).sum(), total_inst))
 print("Accuracy: %.2f" % accuracy_score(y_combined, y_pred))
+
+# Plot confusion matrix
+plot_confusion_matrix(y_combined, y_pred, axes_label, "Confusion matrix")
 
 
 # =============================================================================
@@ -87,10 +139,12 @@ lr.fit(x_train_pca, y_train)
 # testing classifier using the whole dataset (training + testing set)
 y_pred = lr.predict(x_combined)
 # show classification accuracy
-print("\nLogistic Regression ==>")
+print("\nLogistic Regression =======>")
 print("Misclassified/total samples: %d/%d" % ((y_combined != y_pred).sum(), total_inst))
 print("Accuracy: %.2f" % accuracy_score(y_combined, y_pred))
 
+# Plot confusion matrix
+plot_confusion_matrix(y_combined, y_pred, axes_label, "Confusion matrix")
 
 # =============================================================================
 # Support Vector Machine classifier
@@ -106,9 +160,12 @@ svm.fit(x_train_pca, y_train)
 # testing classifier using the whole dataset (training + testing set)
 y_pred = svm.predict(x_combined)
 # show classification accuracy
-print("\nSupport Vector Machine (Linear kernel) ==>")
+print("\nSupport Vector Machine (Linear kernel) =======>")
 print("Misclassified/total samples: %d/%d" % ((y_combined != y_pred).sum(), total_inst))
 print("Accuracy: %.2f" % accuracy_score(y_combined, y_pred))
+
+# Plot confusion matrix
+plot_confusion_matrix(y_combined, y_pred, axes_label, "Confusion matrix")
 
 
 # create nonlinear kernel SVM classifier object and set parameters
@@ -119,10 +176,12 @@ lsvm.fit(x_train_pca, y_train)
 # testing classifier using the whole dataset (training + testing set)
 y_pred = lsvm.predict(x_combined)
 # show classification accuracy
-print("\nSupport Vector Machine (Nonlinear kernel) ==>")
+print("\nSupport Vector Machine (Nonlinear kernel) =======>")
 print("Misclassified/total samples: %d/%d" % ((y_combined != y_pred).sum(), total_inst))
 print("Accuracy: %.2f" % accuracy_score(y_combined, y_pred))
 
+# Plot confusion matrix
+plot_confusion_matrix(y_combined, y_pred, axes_label, "Confusion matrix")
 
 # =============================================================================
 # Decision Tree classifier
@@ -138,9 +197,12 @@ tree.fit(x_train_pca, y_train)
 # testing classifier using the whole dataset (training + testing set)
 y_pred = tree.predict(x_combined)
 # show classification accuracy
-print("\nDecision Tree ==>")
+print("\nDecision Tree =======>")
 print("Misclassified/total samples: %d/%d" % ((y_combined != y_pred).sum(), total_inst))
 print("Accuracy: %.2f" % accuracy_score(y_combined, y_pred))
+
+# Plot confusion matrix
+plot_confusion_matrix(y_combined, y_pred, axes_label, "Confusion matrix")
 
 
 from sklearn.ensemble import RandomForestClassifier
@@ -153,10 +215,12 @@ forest.fit(x_train_pca, y_train)
 # testing classifier using the whole dataset (training + testing set)
 y_pred = forest.predict(x_combined)
 # show classification accuracy
-print("\nRandom Forest ==>")
+print("\nRandom Forest =======>")
 print("Misclassified/total samples: %d/%d" % ((y_combined != y_pred).sum(), total_inst))
 print("Accuracy: %.2f" % accuracy_score(y_combined, y_pred))
 
+# Plot confusion matrix
+plot_confusion_matrix(y_combined, y_pred, axes_label, "Confusion matrix")
 
 # =============================================================================
 # K Nearest Neighbor classifier
@@ -171,6 +235,9 @@ knn.fit(x_train_pca,y_train)
 # testing classifier using the whole dataset (training + testing set)
 y_pred = knn.predict(x_combined)
 # show classification accuracy
-print("\nK Nearest Neighbor ==>")
+print("\nK Nearest Neighbor =======>")
 print("Misclassified/total samples: %d/%d" % ((y_combined != y_pred).sum(), total_inst))
 print("Accuracy: %.2f" % accuracy_score(y_combined, y_pred))
+
+# Plot confusion matrix
+plot_confusion_matrix(y_combined, y_pred, axes_label, "Confusion matrix")
