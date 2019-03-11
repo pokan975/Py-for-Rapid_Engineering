@@ -90,12 +90,12 @@ from sklearn.decomposition import PCA
 pca = PCA(n_components = 30)
 
 # calc the PCA of test data & show result
-pca.fit(x_std)
+pca.fit(x_train_std)
 print("Top 30 Singular values:\n", pca.singular_values_)
 
 # based on the PCA result, only extract the first n highest influential components as variables
-x_train_pca = pca.transform(x_train_std)[:, 0:7]
-x_test_pca = pca.transform(x_test_std)[:, 0:7]
+x_train_pca = pca.transform(x_train_std)[:, 0:6]
+x_test_pca = pca.transform(x_test_std)[:, 0:6]
 
 # recombine data for later test
 x_combined = np.vstack((x_train_pca, x_test_pca))
