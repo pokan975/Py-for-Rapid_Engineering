@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-
 import numpy as np
 from scipy import optimize
 import matplotlib.pyplot as plt
 
 
 Is = 1e-9    # source current (Amp)
-n = 1.5      # constant
+n = 1.5      # ideality constant
 R = 1e4      # resistor (Ohm)
 T = 350.     # temperature (K)
 q = 1.6e-19  # Coulomb constant (Q)
@@ -58,11 +57,11 @@ plt.show()
 # Function:
 # Plot the confusion matrix.
 # =============================================================================
-def residual_diode(res_vd, res_A, res_phi, res_n, res_T, res_R, res_vs):
-    Vt = (res_n * boltz * res_T) / q
-    Is = res_A * res_T * res_T * np.exp(-res_phi * q / (boltz * res_T))
-    i_diode = Is * (np.exp(res_vd / Vt) - 1.)
-    return ((res_vd - res_vs) / res_R) + i_diode
+def residual_diode(vd, A, phi, n, T, R, vs):
+    Vt = (n * boltz * T) / q
+    Is = A * T * T * np.exp(-phi * q / (boltz * T))
+    i_diode = Is * (np.exp(vd / Vt) - 1.)
+    return ((vd - vs) / R) + i_diode
 
 
 # =============================================================================
@@ -73,16 +72,16 @@ def DiodeI(Vs, x):
     current2 = []
     # initial guesses for A, phi, n, T and R values
     vd = 1.    # voltage across the diode (Volt)
-    DiodeI_A = x[0]
-    DiodeI_phi = x[1]
-    DiodeI_n = x[2]
-    DiodeI_T = x[3]
-    DiodeI_R = x[4]
+    A = x[0]
+    phi = x[1]
+    n = x[2]
+    T = x[3]
+    R = x[4]
 
     for v in np.nditer(Vs):
-        DiodeI_vd = optimize.fsolve(residual_diode, vd, (DiodeI_A, DiodeI_phi, DiodeI_n, DiodeI_T, DiodeI_R, v))[0]
-        DiodeI_i = Is * (np.exp((DiodeI_vd * q) / (DiodeI_n * boltz * DiodeI_T)) - 1.)
-        current2.append(DiodeI_i)
+        vd = optimize.fsolve(residual_diode, vd, (A, phi, n, T, R, v))[0]
+        i_d = Is * (np.exp((vd * q) / (n * boltz * T)) - 1.)
+        current2.append(i_d)
         
     return current2
 
@@ -93,7 +92,7 @@ def DiodeI(Vs, x):
 # =============================================================================
 A = 1e-8   # cross-sectional area of the diode
 phi = 0.8  # constant Phi
-n = 1.5    # constant n
+n = 1.5    # ideality constant
 T = 375    # temperature (K)
 R = 1e4    # resistor (Ohm)
 
@@ -110,3 +109,57 @@ plt.ylabel("$\log$($I_{diode}$) (Amp)", fontsize = 16)
 plt.title("Curve of source voltage vs. $I_{diode}$", fontsize = 16)
 plt.grid()
 plt.show()
+
+
+############################################################
+# Problem 2(b)                                             #
+############################################################
+# =============================================================================
+# Function:
+# Plot the confusion matrix.
+# =============================================================================
+def residualphi(phi, A, n, T, R, Vs):
+    
+
+# =============================================================================
+# Function:
+# Plot the confusion matrix.
+# =============================================================================    
+def residualn(n, A, phi, T, R, Vs):
+    
+
+# =============================================================================
+# Function:
+# Plot the confusion matrix.
+# =============================================================================
+def residualR(R, A, phi, n, T, Vs):
+    
+
+# =============================================================================
+# Main Code:
+# Apply different classifiers on data to determine whether heart disease is present
+# =============================================================================
+max_tol = 1e-3
+max_iter = 100
+
+filename = "DiodeIV.txt"
+fh = open(filename, "r")
+
+lines = fh.readlines()
+
+A = []
+T = []
+
+for line in lines:
+    line = line.strip()  # remove space at the start/end of line
+    if line:
+        parameter = line.split(" ")
+        A.append(float(parameter[0]))
+        T.append(float(parameter[1]))
+
+# =============================================================================
+# while (err > max_tol and iteration <= max_iter):
+#     phi = optimize.leastsq(residualphi, phi, all the other parameters including n and R)
+#     n = optimize.leastsq(residualn, n, all the other parameters including n and R)
+#     R = optimize.leastsq(residualR, R, all the other parameters including n and R)
+# =============================================================================
