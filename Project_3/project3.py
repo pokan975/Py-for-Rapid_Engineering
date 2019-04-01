@@ -228,7 +228,7 @@ current2 = solve_i_diode(A_prob2, phi_opt, R_opt, n_opt, T_prob2, v_src_prob2)
 err = np.linalg.norm((current2 - i_meas) / (current2 + i_meas + 1e-15), ord = 1)
 
 print("\n\nProblem 2:\n")
-print("Iteration    R      Phi      n       error")
+print("Iteration    R      Phi      n")
 
 # terate optimization process until error function is satisfied
 while (err > max_tol and iteration < max_iter):
@@ -251,7 +251,7 @@ while (err > max_tol and iteration < max_iter):
     err = np.linalg.norm((current2 - i_meas) / (current2 + i_meas + 1e-15), ord = 1)
     
     # print the optimized resistor, phi, and ideality values with iteration counter.
-    print("{0:9d} {1:7.2f} {2:7.4f} {3:7.4f} {4:10.2e}".format(iteration, R_opt, phi_opt, n_opt, err))
+    print("{0:9d} {1:7.2f} {2:7.4f} {3:7.4f}".format(iteration, R_opt, phi_opt, n_opt))
     
 # plot the relationship of source voltage and log10(diode current) after optimization
 plt.plot(v_src_prob2, np.log10(i_meas), "bs-", label = "measured I")
