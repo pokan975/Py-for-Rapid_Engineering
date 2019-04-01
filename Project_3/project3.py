@@ -47,13 +47,9 @@ for v in np.nditer(v_src_prob1):
     
     current1.append(i_d)
 
-# print source voltage and corresponding diode current
-print("Problem 1:\n")
-print("Voltage      I (amp)")
-for i in range(len(current1)):
-    print("{0:7.4f}   {1:7.4e}".format(v_src_prob1[i], current1[i]))
 
 # plot the relationship of source voltage and log10(diode current) 
+print("Problem 1:\n")
 plt.plot(v_src_prob1, np.log10(current1))
 plt.xlabel("Source Voltage (V)", fontsize = 16)
 plt.ylabel("$\log_{10}$($I_{diode}$) (Amp)", fontsize = 16)
@@ -227,7 +223,7 @@ current2 = solve_i_diode(A_prob2, phi_opt, R_opt, n_opt, T_prob2, v_src_prob2)
 # error = L1 norm of the normalized vector (vector = estimated current - measured current)
 err = np.linalg.norm((current2 - i_meas) / (current2 + i_meas + 1e-15), ord = 1)
 
-print("\n\nProblem 2:\n")
+print("\n\nProblem 2:")
 print("Iteration    R      Phi      n")
 
 # terate optimization process until error function is satisfied
@@ -262,3 +258,8 @@ plt.title("Curve of source voltage vs. $I_{diode}$", fontsize = 16)
 plt.legend(loc = 'center right')
 plt.grid()
 plt.show()
+
+print("")
+print("optimized R: {:.4f} Ohms".format(R_opt))
+print("optimized ideality: {:.4f}".format(n_opt))
+print("optimized phi: {:.4f}".format(phi_opt))
