@@ -25,14 +25,14 @@ for f in fan:
 # a list to store all results of delay time
 result = []
 
-# store the content of the original hspice script as a list of strings for later use
+# store the commands in the original script as a list of strings for later use
 file = open("InvChain.sp", "r")
 # a list to store all script commands
 script = []
 for line in file:
-    # store every line in script as an single element in list, 
-    # except inverter nodes & fanout parameter
-    # (because they are parameters needed to be modified in each test run)
+    # store lines in script as string elements in list, 
+    # except inverter nodes
+    # (because they will to be rearranged for each test run)
     match = re.search(r"^Xinv", line)
     if not match:
         script.append(line)
@@ -42,18 +42,18 @@ file.close()
 
 node = 98  # ASCii code of char "b", used as node name
 
-# use for loop to run every config
+# a for loop for testing all configs
 for counter in range(len(configs)):
     # extract fanout & inverter nums of current test run
     fan_new = configs[counter][0]
     stage_new = configs[counter][1]
 
-    # create a temp script, edit it, then overwrite the content of the original
-    # script file using this temp file
+    # create a temp script, edit it, then overwrite the original
+    # script file with this temp one
     # (because always run hspice with the original script file name)
     file_temp = open("InvChain_temp.sp", "w")
 
-    # write script command line by line from script string list
+    # write script command line by line from string list
     for line in script:
         # modify the fanout and inverter name when writing the corresponding
         # lines
@@ -75,7 +75,7 @@ for counter in range(len(configs)):
         # insert stages of inverter after capacitor setting
         match = re.search(r"Cload", line)
         if match:
-            # write the 1st stage, always starts at node "a", fanout always be 1
+            # write the 1st stage, always starts with node "a", fanout always be 1
             line = "Xinv1 a " + chr(node) + " inv M = 1\n"
             file_temp.write(line)
         
@@ -88,8 +88,8 @@ for counter in range(len(configs)):
             
                 file_temp.write(line)
         
-            # write the last stage, always ends at node "z",
-            # and set the fanout multiply
+            # write the last stage, always ends with node "z",
+            # and set the fanout multiplies
             fans = "*fan" * j
             line = "Xinv"+ str(stage_new) + " " + chr(j + node) + \
             " z inv M = fan" + fans + "\n"
@@ -98,11 +98,11 @@ for counter in range(len(configs)):
             
     
     file_temp.close()
-    # overwrite the original script file using temp file
+    # overwrite the original script file with temp file
     shutil.copyfile('InvChain_temp.sp', 'InvChain.sp')
 
 
-    # run hspice (always use the original script file name)
+    # run hspice
     proc = subprocess.Popen(["hspice", "InvChain.sp"], stdout = subprocess.PIPE)
     output, err = proc.communicate()
     print("*** Running hspice InvChain.sp command ***\n", output)
@@ -111,10 +111,10 @@ for counter in range(len(configs)):
     Data = np.recfromcsv("InvChain.mt0.csv", comments = "$", skip_header = 3)
     print(Data["tphl_inv"])
     # store delay time for each config, use [()] to extract the float num from
-    # an np.array with zero dimension
+    # an np.array with no dimension
     result.append(Data["tphl_inv"][()])
 
-# find the minimum delay time from result list
+# test run finished, find the minimum delay time from result list
 opt_val = min(result)
 # use minimum delay time to find the corresponding config
 opt_config = configs[result.index(opt_val)]
