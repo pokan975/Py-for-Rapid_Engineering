@@ -56,7 +56,7 @@ def diode_i_temp_err(volt, t_guess, tbase):
 # voltages, compute diode current and temp error. Then compute the current at
 # each node, which should sum to 0. Return these sums and the temp error.
 # Inputs:
-#    parmams - an array containing the following values fsolve will optimize:
+#    variables - an array containing the following values fsolve will optimize:
 #              index 0 - voltage at node 1
 #              index 1 - voltage at node 2
 #              index 2 - voltage at node 3
@@ -171,8 +171,8 @@ plt.plot(v_source, n2_volt, 'g', label = "volt at node 2")
 plt.plot(v_source, n3_volt, 'b', label = "volt at node 3")
 plt.legend(loc = "upper left")
 plt.xlabel("Source voltage (Volt)")
-plt.ylabel("Node voltage (Volt)")
-plt.title("Node voltages versus source voltage")
+plt.ylabel("Nodal voltage (Volt)")
+plt.title("Nodal voltages versus source voltage")
 plt.grid()
 plt.show()
 
